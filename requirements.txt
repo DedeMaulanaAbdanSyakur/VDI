@@ -1,6 +1,7 @@
-pandas
-sqlalchemy
-psycopg2-binary
-pymongo
-python-dotenv
 streamlit
+pandas
+python-dotenv
+sqlalchemy
+pymongo
+psycopg2-binary
+plotly
