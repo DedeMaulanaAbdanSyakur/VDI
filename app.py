@@ -7,19 +7,16 @@ from sqlalchemy import create_engine
 from pymongo import MongoClient
 import plotly.express as px
 
-# Konfigurasi halaman
 st.set_page_config(
     page_title="Supermarket Dashboard",
     page_icon="📊",
     layout="wide"
 )
 
-# Load database credentials
 load_dotenv()
 POSTGRES_URI = os.getenv("POSTGRES_URI")
 MONGO_URI = os.getenv("MONGO_URI")
 
-# Load data
 @st.cache_data(ttl=300)
 def load_data():
     engine = create_engine(POSTGRES_URI)
@@ -36,7 +33,6 @@ def load_data():
     return pd.merge(df_mongo, df_pg, on="Branch", how="left")
 
 
-# Ambil data
 try:
     df = load_data()
 except Exception as e:
@@ -51,11 +47,8 @@ if df.empty:
 df["Sales"] = pd.to_numeric(df["Sales"], errors="coerce")
 df["Rating"] = pd.to_numeric(df["Rating"], errors="coerce")
 
-# =====================================
-# SIDEBAR FILTER
-# =====================================
 
-st.sidebar.title("📊 Supermarket")
+st.sidebar.title("Supermarket")
 st.sidebar.subheader("Filter Reports")
 
 cities = sorted(df["City"].dropna().unique())
@@ -90,9 +83,6 @@ filtered_df = df[
     (df["Branch"].isin(selected_branches))
 ]
 
-# =====================================
-# DASHBOARD HEADER
-# =====================================
 
 st.title("Supermarket Analytics")
 st.caption("Sales performance and customer satisfaction overview.")
@@ -187,7 +177,6 @@ else:
         hide_index=True
     )
 
-    # Download CSV
     st.download_button(
         "⬇ Download CSV",
         data=display_df.to_csv(index=False).encode("utf-8"),
